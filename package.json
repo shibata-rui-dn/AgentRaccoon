@@ -1,0 +1,25 @@
+{
+  "name": "auto-analyze",
+  "version": "1.0.0",
+  "description": "AI-powered analysis tool with OpenAI agents",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "build": "npm run build --workspace=shared && npm run build --workspace=backend && npm run build --workspace=frontend",
+    "type-check": "npm run type-check --workspace=backend && npm run type-check --workspace=frontend",
+    "clean": "node scripts/cleanup.js",
+    "clean:db": "node scripts/cleanup.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "concurrently": "^8.2.2",
+    "typescript": "^5.3.0"
+  }
+}

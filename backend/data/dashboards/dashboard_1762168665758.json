@@ -1,0 +1,52 @@
+{
+  "name": "購入分析",
+  "elements": [
+    {
+      "id": "element_1762169049642",
+      "name": "購入情報",
+      "type": "table",
+      "x": 0,
+      "y": 0,
+      "width": 22,
+      "height": 12,
+      "pipelineId": "pipeline_1762162384242",
+      "leafNodeId": "node_1762168815795"
+    },
+    {
+      "id": "element_1762169065297",
+      "name": "価格情報",
+      "type": "table",
+      "x": 0,
+      "y": 12,
+      "width": 22,
+      "height": 11,
+      "pipelineId": "pipeline_1762162384242",
+      "leafNodeId": "node_1762168836018"
+    },
+    {
+      "id": "element_1762169084561",
+      "name": "顧客ごとの購入情報",
+      "type": "table",
+      "x": 0,
+      "y": 23,
+      "width": 22,
+      "height": 11,
+      "pipelineId": "pipeline_1762162384242",
+      "leafNodeId": "dashboard_customer"
+    },
+    {
+      "id": "element_1762169094697",
+      "name": "顧客ごとの購入情報（グラフ）",
+      "type": "bar",
+      "x": 22,
+      "y": 0,
+      "width": 35,
+      "height": 34,
+      "pipelineId": "pipeline_1762162384242",
+      "leafNodeId": "dashboard_customer"
+    }
+  ],
+  "id": "dashboard_1762168665758",
+  "createdAt": "2025-11-03T11:17:45.758Z",
+  "updatedAt": "2025-11-03T14:33:04.839Z"
+}

@@ -1,0 +1,78 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
+
+# Database files (specific exceptions defined below in sample files section)
+*.sqlite
+*.sqlite3
+
+# Upload files
+backend/uploads/
+uploads/
+
+# Data directories
+/data/
+# backend/data/ - using specific subdirectory rules below in sample files section
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Testing
+coverage/
+.nyc_output/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+.cache/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+.claude/
+
+# sample files - ignore all backend/data/ except specific files
+backend/data/*
+!backend/data/dashboards/
+backend/data/dashboards/*
+!backend/data/dashboards/dashboard_1762168665758.json
+!backend/data/databases/
+backend/data/databases/*
+!backend/data/databases/db_1762161689735.db
+!backend/data/pipelines/
+backend/data/pipelines/*
+!backend/data/pipelines/pipeline_1762162384242.json
+
+# Allow specific db files (overrides *.db if it were present)
+!backend/data/databases/db_1762161689735.db
+!backend/data/databases/db_1762161722919.db
+!backend/data/databases/metadata.json
+
+
+# Test data
+test/data/

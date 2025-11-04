@@ -1,0 +1,134 @@
+{
+  "name": "購入分析",
+  "description": "顧客ごとの購入金額を集計し、ダッシュボート連携するパイプライン",
+  "nodes": [
+    {
+      "id": "datasource_default",
+      "type": "dataSource",
+      "label": "購入",
+      "config": {
+        "isInitial": true,
+        "databaseId": "db_1762161689735"
+      },
+      "position": {
+        "x": 100,
+        "y": 200
+      }
+    },
+    {
+      "id": "node_1762162392928",
+      "type": "dataSource",
+      "label": "価格",
+      "config": {
+        "databaseId": "db_1762161722919"
+      },
+      "position": {
+        "x": 225.83778183433958,
+        "y": 202.09112210431397
+      }
+    },
+    {
+      "id": "custom_merge_items",
+      "type": "custom",
+      "label": "購入リスト展開・価格結合",
+      "config": {
+        "customCode": "function process(purchases, prices) {\n  // Build price lookup map: 商品ID -> price info (ensure numeric 単価)\n  const priceMap = {};\n  (prices || []).forEach(p => {\n    const id = p['商品ID'];\n    let price = p['単価'];\n    if (typeof price === 'string') {\n      // remove currency symbols, commas, whitespace\n      price = price.replace(/[¥,\\s]/g, '');\n    }\n    price = Number(price);\n    if (isNaN(price)) price = 0;\n    priceMap[id] = Object.assign({}, p, { 単価: price });\n  });\n\n  const expanded = [];\n  (purchases || []).forEach(row => {\n    const listStr = row['購入リスト'] || '';\n    // Normalize: remove surrounding brackets if present and split by comma\n    const trimmed = listStr.replace(/^\\s*\\[|\\]\\s*$/g, '').trim();\n    const items = trimmed === '' ? [] : trimmed.split(',').map(s => s.trim()).filter(Boolean);\n\n    if (items.length === 0) {\n      // Preserve original row but indicate no items\n      expanded.push(Object.assign({}, row, { 商品ID: null, 商品名: null, 単価: 0 }));\n    } else {\n      items.forEach(itemId => {\n        const p = priceMap[itemId] || { 商品名: null, 単価: 0 };\n        // Preserve all original fields and add item-level fields\n        expanded.push(Object.assign({}, row, { 商品ID: itemId, 商品名: p['商品名'], 単価: p['単価'] }));\n      });\n    }\n  });\n\n  return expanded;\n}"
+      },
+      "position": {
+        "x": 186,
+        "y": 370.09112210431397
+      }
+    },
+    {
+      "id": "aggregate_by_customer",
+      "type": "aggregate",
+      "label": "顧客ごと合計金額",
+      "config": {
+        "groupBy": [
+          "購入者ID"
+        ],
+        "aggregations": [
+          {
+            "field": "単価",
+            "function": "sum",
+            "alias": "合計購入金額"
+          },
+          {
+            "field": "購入記録ID",
+            "function": "count",
+            "alias": "購入回数"
+          }
+        ]
+      },
+      "position": {
+        "x": 210,
+        "y": 469.09112210431397
+      }
+    },
+    {
+      "id": "dashboard_customer",
+      "type": "dashboard",
+      "label": "顧客購入ダッシュボード",
+      "config": {},
+      "position": {
+        "x": 248,
+        "y": 561.091122104314
+      }
+    },
+    {
+      "id": "node_1762168815795",
+      "type": "dashboard",
+      "label": "購入データ",
+      "config": {},
+      "position": {
+        "x": 327.3912200082841,
+        "y": 320.5114758125291
+      }
+    },
+    {
+      "id": "node_1762168836018",
+      "type": "dashboard",
+      "label": "価格情報",
+      "config": {},
+      "position": {
+        "x": 437.23484486938787,
+        "y": 287.06335980545106
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e_datasource_default_custom_merge_items_input-0",
+      "source": "datasource_default",
+      "target": "custom_merge_items"
+    },
+    {
+      "id": "e_node_1762162392928_custom_merge_items_input-1",
+      "source": "node_1762162392928",
+      "target": "custom_merge_items"
+    },
+    {
+      "id": "e_aggregate_by_customer_dashboard_customer",
+      "source": "aggregate_by_customer",
+      "target": "dashboard_customer"
+    },
+    {
+      "id": "reactflow__edge-datasource_default-node_1762168815795",
+      "source": "datasource_default",
+      "target": "node_1762168815795"
+    },
+    {
+      "id": "reactflow__edge-node_1762162392928-node_1762168836018",
+      "source": "node_1762162392928",
+      "target": "node_1762168836018"
+    },
+    {
+      "id": "reactflow__edge-custom_merge_items-aggregate_by_customer",
+      "source": "custom_merge_items",
+      "target": "aggregate_by_customer"
+    }
+  ],
+  "id": "pipeline_1762162384242",
+  "createdAt": "2025-11-03T09:33:04.242Z",
+  "updatedAt": "2025-11-03T17:51:32.403Z"
+}
