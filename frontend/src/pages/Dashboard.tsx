@@ -63,7 +63,7 @@ const Dashboard: React.FC = () => {
           <div className="text-center space-y-3 pb-6">
             <div className="flex items-center justify-center gap-2 mb-2">
               <img
-                src="/iconRaccoon.png"
+                src="/iconraccoon.png"
                 alt="AgentRaccoon"
                 className="h-8 w-8 object-contain"
               />

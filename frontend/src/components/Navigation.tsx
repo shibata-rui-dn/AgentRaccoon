@@ -37,7 +37,7 @@ const Navigation: React.FC = () => {
         <div className="flex items-center justify-between h-12">
           <div className="flex items-center gap-2">
             <img
-              src="/iconRaccoon.png"
+              src="/iconraccoon.png"
               alt="AgentRaccoon"
               className="h-8 w-auto object-contain"
             />

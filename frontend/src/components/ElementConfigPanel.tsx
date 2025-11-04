@@ -114,7 +114,11 @@ const ElementConfigContent: React.FC<{
         <>
           <div className="space-y-2">
             <Label>パイプライン</Label>
-            <Select value={selectedElement.pipelineId || ''} onValueChange={(pipelineId) => onSelectPipeline(selectedElement.id, pipelineId)}>
+            <Select
+              key={`pipeline-${selectedElement.id}-${selectedElement.type}`}
+              value={selectedElement.pipelineId || ''}
+              onValueChange={(pipelineId) => onSelectPipeline(selectedElement.id, pipelineId)}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="パイプラインを選択" />
               </SelectTrigger>
@@ -132,7 +136,11 @@ const ElementConfigContent: React.FC<{
           {selectedElement.pipelineId && availableLeafNodes[selectedElement.pipelineId] && (
             <div className="space-y-2">
               <Label>データソース</Label>
-              <Select value={selectedElement.leafNodeId || ''} onValueChange={(leafNodeId) => onSelectLeafNode(selectedElement.id, leafNodeId)}>
+              <Select
+                key={`leafnode-${selectedElement.id}-${selectedElement.pipelineId}`}
+                value={selectedElement.leafNodeId || ''}
+                onValueChange={(leafNodeId) => onSelectLeafNode(selectedElement.id, leafNodeId)}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="ノードを選択" />
                 </SelectTrigger>
@@ -149,23 +157,6 @@ const ElementConfigContent: React.FC<{
         </>
       )}
     </>
-  )
-}, (prevProps, nextProps) => {
-  // 名前、タイプ、パイプライン、リーフノードが変更されていない場合は再レンダリングしない
-  // 位置やサイズの変更では再レンダリングされない
-  // ハンドラー関数は常に安定しているので比較不要
-  return (
-    prevProps.selectedElement.id === nextProps.selectedElement.id &&
-    prevProps.selectedElement.name === nextProps.selectedElement.name &&
-    prevProps.selectedElement.type === nextProps.selectedElement.type &&
-    prevProps.selectedElement.pipelineId === nextProps.selectedElement.pipelineId &&
-    prevProps.selectedElement.leafNodeId === nextProps.selectedElement.leafNodeId &&
-    prevProps.pipelines === nextProps.pipelines &&
-    prevProps.availableLeafNodes === nextProps.availableLeafNodes &&
-    prevProps.onUpdateElementName === nextProps.onUpdateElementName &&
-    prevProps.onSelectElementType === nextProps.onSelectElementType &&
-    prevProps.onSelectPipeline === nextProps.onSelectPipeline &&
-    prevProps.onSelectLeafNode === nextProps.onSelectLeafNode
   )
 })
 
@@ -232,15 +223,16 @@ export default memo(ElementConfigPanel, (prevProps, nextProps) => {
     return false
   }
 
-  // 両方とも null でない場合、selectedElement の ID のみを比較
+  // 両方とも null でない場合、重要なプロパティを比較
   // 位置・サイズの変更は ElementPositionDisplay で処理されるため、ここでは比較しない
+  // しかし、type, pipelineId, leafNodeId は比較する必要がある
   return (
     prevProps.selectedElement.id === nextProps.selectedElement.id &&
+    prevProps.selectedElement.name === nextProps.selectedElement.name &&
+    prevProps.selectedElement.type === nextProps.selectedElement.type &&
+    prevProps.selectedElement.pipelineId === nextProps.selectedElement.pipelineId &&
+    prevProps.selectedElement.leafNodeId === nextProps.selectedElement.leafNodeId &&
     prevProps.pipelines === nextProps.pipelines &&
-    prevProps.availableLeafNodes === nextProps.availableLeafNodes &&
-    prevProps.onUpdateElementName === nextProps.onUpdateElementName &&
-    prevProps.onSelectElementType === nextProps.onSelectElementType &&
-    prevProps.onSelectPipeline === nextProps.onSelectPipeline &&
-    prevProps.onSelectLeafNode === nextProps.onSelectLeafNode
+    prevProps.availableLeafNodes === nextProps.availableLeafNodes
   )
 })
